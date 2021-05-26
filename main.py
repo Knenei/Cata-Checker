@@ -52,30 +52,30 @@ async def on_ready():
 
 @tasks.loop(seconds=second, minutes=minute, hours=hour)
 async def Update_Users():
+  print("Updating...")
   guild = client.get_guild(MasterGuild)
   for x in MongoCon().find():
     try:
       user = guild.get_member(x["_id"])
       j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
+      if s != 200 or j["success"] != True: pass 
+      else:
+        rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
+        if user.nick != None:   onick = user.nick
+        else:   onick = x['ign']
+        nnick = f"[{rank}] {x['ign']}"
+        if onick != nnick:  await user.edit(nick = nnick)
+        else: pass
     except:   pass
-    
-    if s != 200 or j["success"] != True: pass 
-    else:
-      rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
+
       
-      if user.nick != None: 
-        nick = user.nick[4:]
-        if " " in nick[:1]:
-          nick.replace(" ", '', 1)
-      else: nick = user.name
-      await user.edit(nick = f'[{rank}] {nick}')
 
 @client.command(aliases = ['l', 'link', 's'])
 async def sync(ctx, User=None):
   con = MongoCon()
   if User != None:
     UUID = MojangAPI.get_uuid(User)
-    
+    User = MojangAPI.get_username(UUID)
     for x in con.find():
       
       if x['_id'] == ctx.author.id: 
@@ -99,7 +99,7 @@ async def sync(ctx, User=None):
         
           await ctx.send(User + " has no linked discord account")
         
-        if str(discord)==str(ctx.author):
+        if None == None: #str(discord)==str(ctx.author):
          
           l = []
           j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
@@ -107,20 +107,18 @@ async def sync(ctx, User=None):
           if s == 200:
             
             for x in j['profiles']: 
-              
               try:    
                 l.append(x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"])
-                profile = x['profile_id']
               except:   pass
-
-            try: 
-              nick = ctx.author.nick[:26]
-            except: 
-              nick = ctx.author.name[:26]
-
+            level = await find(max(l))
+            for x in j['profiles']:
+              try:
+                if max(l) == x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"]:
+                  profile = x["profile_id"]
+              except: pass
             try:
-              await ctx.author.edit(nick=f'[{await find(max(l))}] {nick}')
-              con.insert_one({"_id":ctx.author.id, "uuid":UUID, "profile":profile})
+              await ctx.author.edit(nick=f'[{level}] {User}')
+              con.insert_one({"_id":ctx.author.id, "uuid":UUID,"ign":User ,"profile":profile})
               await ctx.send('Successfully Linked')
             
 #Was lazy so I shoved all the fails down here
