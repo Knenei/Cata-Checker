@@ -2,7 +2,7 @@
 name = "carrier-bot"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Knei#4714"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
