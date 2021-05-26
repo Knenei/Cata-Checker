@@ -1,13 +1,13 @@
+import os
 # config (Update as you see fit)
 prefix = '$'
-MasterGuild = 845847890991251486
+MasterGuild = os.environ["MGUILD"]
 # Cata Update Frequency
 second = 0
 minute = 1
 hour = 0
 
 #Code
-import os
 import json
 import aiohttp
 import discord
@@ -65,7 +65,7 @@ async def Update_Users():
       
       if user.nick != None: 
         nick = user.nick[4:]
-        if nick[:0] == " ":
+        if " " in nick[:1]:
           nick.replace(" ", '', 1)
       else: nick = user.name
       await user.edit(nick = f'[{rank}] {nick}')
