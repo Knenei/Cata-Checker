@@ -1,7 +1,7 @@
 import os
 # config (Update as you see fit)
 prefix = '$'
-MasterGuild = os.environ["MGUILD"]
+MasterGuild = int(os.environ["MGUILD"])
 # Cata Update Frequency
 second = 0
 minute = 1
@@ -52,21 +52,33 @@ async def on_ready():
 
 @tasks.loop(seconds=second, minutes=minute, hours=hour)
 async def Update_Users():
-  print("Updating...")
+  Total = 0
+  UsersUp = 0
+  UsersNo = 0
+  print("Updating...", end='\r')
   guild = client.get_guild(MasterGuild)
   for x in MongoCon().find():
+    Total +=1
     try:
       user = guild.get_member(x["_id"])
+    except: pass
+    else:
       j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
       if s != 200 or j["success"] != True: pass 
       else:
         rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
-        if user.nick != None:   onick = user.nick
-        else:   onick = x['ign']
+        if user.nick != None:   
+          onick = user.nick
+        else:   
+          onick = None
         nnick = f"[{rank}] {x['ign']}"
-        if onick != nnick:  await user.edit(nick = nnick)
-        else: pass
-    except:   pass
+        if onick == nnick:  
+          UsersNo+=1
+        else: 
+          await user.edit(nick = nnick)
+          UsersUp+=1
+  print("Update Finished!")
+  print("\rUsers Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nTotal Users: {:2.1%}".format(UsersUp/Total, UsersNo/Total, Total))
 
       
 
@@ -99,7 +111,7 @@ async def sync(ctx, User=None):
         
           await ctx.send(User + " has no linked discord account")
         
-        if None == None: #str(discord)==str(ctx.author):
+        if str(discord)==str(ctx.author):
          
           l = []
           j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
@@ -120,7 +132,7 @@ async def sync(ctx, User=None):
               await ctx.author.edit(nick=f'[{level}] {User}')
               con.insert_one({"_id":ctx.author.id, "uuid":UUID,"ign":User ,"profile":profile})
               await ctx.send('Successfully Linked')
-            
+
 #Was lazy so I shoved all the fails down here
             except: await ctx.send('There was an error. Please Try again')
           else: await ctx.send('Failed to connect to the skyblock profile endpoint.\nPlease try again.')
