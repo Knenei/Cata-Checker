@@ -47,7 +47,7 @@ async def find(exp:int):
     for x in j:
         if x['total'] > exp:
             return n
-    n+=1
+        n+=1
     return 50
 
 @client.event
