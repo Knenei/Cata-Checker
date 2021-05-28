@@ -75,29 +75,52 @@ async def Update_Users():
     Total = UsersUp = UsersNo = UserUnknown = 0
     guild = client.get_guild(masterguild)
     role = discord.utils.get(guild.roles, id=AdminRole)
-    print("Updating...", end='\r')
+    print("Updating...")
     for x in MongoCon('users').find():
         Total +=1
-        try:    user = guild.get_member(x["_id"])
-        except:     pass
+        print(1)
+        try:    
+            user = guild.get_member(x["_id"])
+            print(2)
+        except:     
+            print(3)
+            pass
         else:  
+            print(4)
             try:
-                if role in user.roles: UserUnknown+=1
+                print(5)
+                if role in user.roles: 
+                    UserUnknown+=1
+                    print(6)
                 else:
-                    if user == None:  UsersNo+=1
+                    print(7)
+                    if user == None:  
+                        UsersNo+=1
+                        print(8)
                     else: 
+                        print(9)
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
                         if s != 200 or j["success"] != True: pass 
                         else:
+                            print(10)
                             rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
-                        if user.nick != None:   onick = user.nick
-                        else:   onick = None
+                        if user.nick != None:   
+                            onick = user.nick
+                            print(11)
+                        else:   
+                            onick = None
+                            print(12)
                         nnick = f"[{rank}] {x['ign']}"
-                        if onick == nnick:  UsersNo+=1
+                        if onick == nnick:  
+                            UsersNo+=1
+                            print(13)
                         else: 
                             await user.edit(nick = nnick)
                             UsersUp+=1
-            except: UserUnknown+=1
+                            print(14)
+            except: 
+                UserUnknown+=1
+                print(51)
     print("Update Finished!")
     if Total !=0:
         print("\rUsers Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nNot Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
