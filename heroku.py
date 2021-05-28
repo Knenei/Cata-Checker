@@ -1,5 +1,4 @@
 import os
-import json
 import asyncio
 import aiohttp
 import discord
@@ -106,7 +105,7 @@ async def Update_Users():
       
 
 @client.command(aliases = ['l', 'link', 's'])
-@commands.has_any_role(843249027411607552, 843248725190508564, 719848521813196951)#, 847470285330710538)
+@commands.has_any_role(843249027411607552, 843248725190508564, 719848521813196951, 847470285330710538)
 async def sync(ctx, User=None):
     con = MongoCon('users')
     if User != None:
