@@ -9,11 +9,11 @@ from discord.ext import commands, tasks
 
 
 # config (Update as you see fit)
-prefix = '$'
+prefix = '%'
 client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all(), case_insensitive = True) 
 #please dont mess with ^^^^ thanks :)
 masterguild = int(os.environ["MGUILD"])
-AdminRole = int(os.environ['ROLE'])
+AdminRole = 719848521813196951
 # Cata Update Frequency
 second = 0
 minute = 1
