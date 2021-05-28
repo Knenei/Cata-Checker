@@ -133,14 +133,11 @@ async def Update_Users():
 @client.command(aliases = ['l', 'link', 's'])
 @commands.has_any_role(843249027411607552, 843248725190508564, 719848521813196951)
 async def sync(ctx, User=None):
-    print("Command Running")
     con = MongoCon('users')
     if User != None:
-        print("Command Running 1")
         UUID = MojangAPI.get_uuid(User)
         User = MojangAPI.get_username(UUID)
         for x in con.find():
-            print("Command Running2")
             if x['_id'] == ctx.author.id: 
                 await ctx.send('You are already linked!')
                 return
@@ -148,17 +145,14 @@ async def sync(ctx, User=None):
                 await ctx.send('This minecraft account is already linked!')
                 return
             else: pass
-        print("Command Running3")
         if UUID != None:
             j, s = await HypixelCon('player',uuid=UUID)
             if s == 200:
-                print("Command Running4")
                 try:    
                     discord = j['player']['socialMedia']['links']['DISCORD']
                 except KeyError: 
                     await ctx.send(User + " has no linked discord account.\nLink an account by going ingame\n ```scala\nPlayer Head > Social > Discord\n```")
                 if str(discord)==str(ctx.author):
-                    print("Command Running5")
                     l = []
                     j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
                     print(j)
@@ -203,7 +197,7 @@ async def on_sync_error(ctx, error):
     if isinstance(error, commands.errors.MissingAnyRole):
         await ctx.send("You don't have a carrier role!")
     else:
-        pass
+        raise error
 
 
 @client.command(aliases = ["ru", "deleteuser", "du"])
