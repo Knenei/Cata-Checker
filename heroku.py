@@ -164,9 +164,11 @@ async def sync(ctx, User=None):
                                 await ctx.author.edit(nick=f'[{level}] {User}')
                                 con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
                                 await ctx.send('Successfully Linked')   
+                            else: 
+                                con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
+                                await ctx.send('Successfully Linked')   
 
     #Was lazy so I shoved all the fails down here
-                            else: await ctx.send("Wow An error occured while trying to upload data. Please try again")
                         except: await ctx.send('There was an error. Please Try again.')
                     else: await ctx.send('Failed to connect to the skyblock profile endpoint.\nPlease try again.')
                 else: await ctx.send('The given discord does not match yours')  
