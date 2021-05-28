@@ -10,7 +10,9 @@ from discord.ext import commands, tasks
 
 # config (Update as you see fit)
 prefix = '%'
-client = commands.Bot(command_prefix=prefix, intents=discord.Intents.default(), case_insensitive = True) 
+intents = discord.Intents.default()
+intents.members = True
+client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive = True)
 #please dont mess with ^^^^ thanks :)
 masterguild = int(os.environ["MGUILD"])
 AdminRole = 719848521813196951
