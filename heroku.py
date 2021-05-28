@@ -13,7 +13,7 @@ prefix = '$'
 client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all(), case_insensitive = True) 
 #please dont mess with ^^^^ thanks :)
 masterguild = int(os.environ["MGUILD"])
-
+AdminRole = int(os.environ['ROLE'])
 # Cata Update Frequency
 second = 0
 minute = 1
@@ -74,7 +74,7 @@ async def help(ctx):
 async def Update_Users():
     Total = UsersUp = UsersNo = UserUnknown = 0
     guild = client.get_guild(masterguild)
-    role = discord.utils.get(guild.roles, id=719848521813196951)#847470285330710538)
+    role = discord.utils.get(guild.roles, id=AdminRole)
     print("Updating...", end='\r')
     for x in MongoCon('users').find():
         Total +=1
@@ -141,7 +141,7 @@ async def sync(ctx, User=None):
                             except: pass
                         try:
                             guild = client.get_guild(masterguild)
-                            role = get(guild.roles, id=719848521813196951)#847470285330710538)
+                            role = get(guild.roles, id=AdminRole)
                             if role not in ctx.author.roles:
                                 await ctx.author.edit(nick=f'[{level}] {User}')
                             else:
