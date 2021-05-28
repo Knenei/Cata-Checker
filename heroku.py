@@ -170,7 +170,7 @@ async def sync(ctx, User=None):
                                 l.append(x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"])
                                 print("Hello")
                             except:
-                                print("Hello")
+                                print("Hello1")
 
                         level = await find(max(l))
                         print("Finding profile ID")
