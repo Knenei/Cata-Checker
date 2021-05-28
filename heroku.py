@@ -87,9 +87,9 @@ async def Update_Users():
             pass
         else:  
             print(4)
+            print(role, user.roles)
             try:
                 print(5)
-                print(role, user.roles)
                 if role in user.roles: 
                     UserUnknown+=1
                     print(6)
