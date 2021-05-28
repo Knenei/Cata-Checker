@@ -89,6 +89,7 @@ async def Update_Users():
             print(4)
             try:
                 print(5)
+                print(role, user.roles)
                 if role in user.roles: 
                     UserUnknown+=1
                     print(6)
@@ -120,7 +121,7 @@ async def Update_Users():
                             print(14)
             except: 
                 UserUnknown+=1
-                print(51)
+                print(15)
     print("Update Finished!")
     if Total !=0:
         print("\rUsers Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nNot Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
