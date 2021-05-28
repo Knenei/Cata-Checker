@@ -88,14 +88,12 @@ async def Update_Users():
             print(3)
             pass
         else:  
-            print(4)
-            print(role)
-            print(user.roles)
             try:
                 print(5)
-                if role in user:#roles: 
+                if role in user.roles: 
                     UserUnknown+=1
                     print(6)
+                    pass
                 else:
                     print(7)
                     if user == None:  
@@ -109,7 +107,7 @@ async def Update_Users():
 
                             print(10)
                             rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
-                        else: raise Error
+                        else: raise Exception
                         if user.nick != None:   
                             onick = user.nick
                             print(11)
@@ -129,13 +127,14 @@ async def Update_Users():
                 print(15)
     print("Update Finished!")
     if Total !=0:
-        print("\rUsers Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nNot Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
+        print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nNot Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
     else: print("No users in database")
       
 
 @client.command(aliases = ['l', 'link', 's'])
-@commands.has_any_role(843249027411607552, 843248725190508564, 719848521813196951, 847470285330710538)
+@commands.has_any_role(843249027411607552, 843248725190508564, 719848521813196951)
 async def sync(ctx, User=None):
+    print("Command Running")
     con = MongoCon('users')
     if User != None:
         UUID = MojangAPI.get_uuid(User)
