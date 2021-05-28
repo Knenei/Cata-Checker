@@ -156,37 +156,29 @@ async def sync(ctx, User=None):
                 if str(discord)==str(ctx.author):
                     l = []
                     j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
-                    print(j)
                     if s == 200:
-                        print("Profile scanning")
-                        try:
-                            for x in j['profiles']: 
-                                print("scanning")
-                                try:    
-                                    l.append(x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"])
-                                    print("Hello")
-                                except:
-                                    pass
-                            raise Exception
-                        except:
-                            level = await find(max(l))
-                            print("Finding profile ID")
-                            for x in j['profiles']:
-                                try:
-                                    if max(l) == x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"]:
-                                        profile = x["profile_id"]
-                                except: pass
+                        for x in j['profiles']: 
+                            try:    
+                                l.append(x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"])
+                            except:
+                                pass
+                        level = await find(max(l))
+                        for x in j['profiles']:
                             try:
-                                guild = client.get_guild(masterguild)
-                                role = get(guild.roles, id=AdminRole)
-                                if role not in ctx.author.roles:
-                                    await ctx.author.edit(nick=f'[{level}] {User}')
-                                else:
-                                    con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
-                                    await ctx.send('Successfully Linked')   
+                                if max(l) == x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"]:
+                                    profile = x["profile_id"]
+                            except: pass
+                        try:
+                            guild = client.get_guild(masterguild)
+                            role = get(guild.roles, id=AdminRole)
+                            if role not in ctx.author.roles:
+                                await ctx.author.edit(nick=f'[{level}] {User}')
+                                con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
+                                await ctx.send('Successfully Linked')   
 
     #Was lazy so I shoved all the fails down here
-                            except: await ctx.send('There was an error. Please Try again.')
+                            else: await ctx.send("Wow An error occured while trying to upload data. Please try again")
+                        except: await ctx.send('There was an error. Please Try again.')
                     else: await ctx.send('Failed to connect to the skyblock profile endpoint.\nPlease try again.')
                 else: await ctx.send('The given discord does not match yours')  
             else: await ctx.send('Failed to connect to Hypixel API please try again\nIf this happens multiple times the API might be down')
