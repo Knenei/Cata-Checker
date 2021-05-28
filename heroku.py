@@ -80,14 +80,15 @@ async def Update_Users():
         Total +=1
         print(1)
         try:    
-            user = guild.get_member(x["_id"])
+            user = guild.get_member(int(x["_id"])
             print(2)
         except:     
             print(3)
             pass
         else:  
             print(4)
-            print(role, user.roles)
+            print(role)
+            print(user.roles)
             try:
                 print(5)
                 if role in user.roles: 
