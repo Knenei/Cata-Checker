@@ -104,6 +104,7 @@ async def Update_Users():
                     else: 
                         print(9)
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
+                        print(j, s)
                         if s != 200 or j["success"] != True: pass 
                         else:
                             print(10)
