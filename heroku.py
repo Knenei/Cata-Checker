@@ -160,15 +160,17 @@ async def sync(ctx, User=None):
                 if str(discord)==str(ctx.author):
                     print("Command Running5")
                     l = []
-                    print(UUID)
                     j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
-                    print(s)
+                    print(j)
                     if s == 200:
+                        print("Profile scanning")
                         for x in j['profiles']: 
+                            print("scanning")
                             try:    
                                 l.append(x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"])
                             except:   pass
                         level = await find(max(l))
+                        print("Finding profile ID")
                         for x in j['profiles']:
                             try:
                                 if max(l) == x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"]:
