@@ -45,7 +45,7 @@ async def HypixelCon(endpoint, **kwargs):
 
 
 async def find(exp:int):
-    n = -2
+    n = -1
     j = MongoCon('config').find_one({"_id":"Dungeons"})
     for x in j['info']:
         if x['total'] > exp:
@@ -116,7 +116,7 @@ async def Update_Users():
                 UserUnknown+=1
     print("Update Finished!")
     if Total !=0:
-        print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nNot Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
+        print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
     else: print("No users in database")
       
 
@@ -181,8 +181,7 @@ async def sync(ctx, User=None):
 async def on_sync_error(ctx, error):
     if isinstance(error, commands.errors.MissingAnyRole):
         await ctx.send("You don't have a carrier role!")
-    else:
-        raise error
+    else: pass
 
 
 @client.command(aliases = ["ru", "deleteuser", "du"])
