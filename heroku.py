@@ -105,10 +105,11 @@ async def Update_Users():
                         print(9)
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
                         print(j, s)
-                        if s != 200 or j["success"] != True: pass 
-                        else:
+                        if s == 200 and j["success"] == True: 
+
                             print(10)
                             rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
+                        else: raise Error
                         if user.nick != None:   
                             onick = user.nick
                             print(11)
