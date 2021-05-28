@@ -80,51 +80,50 @@ async def Update_Users():
     print("Updating...")
     for x in MongoCon('users').find():
         Total +=1
-        print(1)
+        #print(1)
         try:    
             user = guild.get_member(int(x["_id"]))
-            print(2)
+            #print(2)
         except:     
-            print(3)
+            #print(3)
             pass
         else:  
             try:
-                print(5)
+                #print(5)
                 if role in user.roles: 
                     UserUnknown+=1
-                    print(6)
+                    #print(6)
                     pass
                 else:
-                    print(7)
+                    #print(7)
                     if user == None:  
                         UsersNo+=1
-                        print(8)
+                        #print(8)
                     else: 
-                        print(9)
+                        #print(9)
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
-                        print(j, s)
+                        #print(j, s)
                         if s == 200 and j["success"] == True: 
-
-                            print(10)
+                            #print(10)
                             rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
                         else: raise Exception
                         if user.nick != None:   
                             onick = user.nick
-                            print(11)
+                            #print(11)
                         else:   
                             onick = None
-                            print(12)
+                            #print(12)
                         nnick = f"[{rank}] {x['ign']}"
                         if onick == nnick:  
                             UsersNo+=1
-                            print(13)
+                            #print(13)
                         else: 
                             await user.edit(nick = nnick)
                             UsersUp+=1
-                            print(14)
+                            #print(14)
             except: 
                 UserUnknown+=1
-                print(15)
+                #print(15)
     print("Update Finished!")
     if Total !=0:
         print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nNot Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
@@ -137,23 +136,29 @@ async def sync(ctx, User=None):
     print("Command Running")
     con = MongoCon('users')
     if User != None:
+        print("Command Running 1")
         UUID = MojangAPI.get_uuid(User)
         User = MojangAPI.get_username(UUID)
         for x in con.find():
+            print("Command Running2")
             if x['_id'] == ctx.author.id: 
                 await ctx.send('You are already linked!')
                 return
             elif x['uuid'] == UUID: 
                 await ctx.send('This minecraft account is already linked!')
                 return
+            else: pass
+        print("Command Running3")
         if UUID != None:
             j, s = await HypixelCon('player',uuid=UUID)
             if s == 200:
+                print("Command Running4")
                 try:    
                     discord = j['player']['socialMedia']['links']['DISCORD']
                 except KeyError: 
                     await ctx.send(User + " has no linked discord account.\nLink an account by going ingame\n ```scala\nPlayer Head > Social > Discord\n```")
                 if str(discord)==str(ctx.author):
+                    print("Command Running5")
                     l = []
                     j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
                     if s == 200:
