@@ -160,7 +160,9 @@ async def sync(ctx, User=None):
                 if str(discord)==str(ctx.author):
                     print("Command Running5")
                     l = []
+                    print(UUID)
                     j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
+                    print(s)
                     if s == 200:
                         for x in j['profiles']: 
                             try:    
