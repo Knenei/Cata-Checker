@@ -45,9 +45,8 @@ async def HypixelCon(endpoint, **kwargs):
 
 
 async def find(exp:int):
-    n = -1
+    n = 0
     j = MongoCon('config').find_one({"_id":"Dungeons"})
-    print(j)
     for x in j['info']:
         if x['total'] > exp:
             return n
@@ -63,14 +62,19 @@ async def on_ready():
 
 @client.command() 
 async def help(ctx):
+    guild = client.get_guild(masterguild)
+    arole = get(guild.roles, id=AdminRole)
+    brole = get(guild.roles, id=846825420993331203)
     Help = discord.Embed(title=f"{client.user.name}#{client.user.discriminator}'s Comand Help Page", description=f"**Bot Prefix**=`{prefix}`")
     Help.set_footer(text="Don't DM Knei#4714 with complaints")
     Help.add_field(name="link",value= f"aliases: `['sync', 's', 'l']`\nCommand: `{prefix}link <IGN>`\nRoles Required: `Jr Carrier, Sr Carrier`")
+    if (arole or brole) in ctx.author.roles:
+        Help.add_field(name="removeuser", value=f"aliases: `[ru, deleteuser, du]`\nCommand: `{prefix}removeuser <User>`\nRoles Required: `Carrier Manager, Staff Team`")
     try:
         await ctx.author.send(embed=Help)
         await ctx.send("Check your DM's")
     except:
-        await ctx.send()
+        await ctx.send(embed=Help)
 
 
 @tasks.loop(seconds=second, minutes=minute, hours=hour)
@@ -81,50 +85,35 @@ async def Update_Users():
     print("Updating...")
     for x in MongoCon('users').find():
         Total +=1
-        #print(1)
         try:    
             user = guild.get_member(int(x["_id"]))
-            #print(2)
         except:     
-            #print(3)
             pass
         else:  
             try:
-                #print(5)
                 if role in user.roles: 
                     UserUnknown+=1
-                    #print(6)
                     pass
                 else:
-                    #print(7)
                     if user == None:  
                         UsersNo+=1
-                        #print(8)
                     else: 
-                        #print(9)
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
-                        #print(j, s)
                         if s == 200 and j["success"] == True: 
-                            #print(10)
                             rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
                         else: raise Exception
                         if user.nick != None:   
                             onick = user.nick
-                            #print(11)
                         else:   
                             onick = None
-                            #print(12)
                         nnick = f"[{rank}] {x['ign']}"
                         if onick == nnick:  
                             UsersNo+=1
-                            #print(13)
                         else: 
                             await user.edit(nick = nnick)
                             UsersUp+=1
-                            #print(14)
             except: 
                 UserUnknown+=1
-                #print(15)
     print("Update Finished!")
     if Total !=0:
         print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nNot Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
