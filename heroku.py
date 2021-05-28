@@ -166,6 +166,7 @@ async def sync(ctx, User=None):
                                     print("Hello")
                                 except:
                                     pass
+                            raise Exception
                         except:
                             level = await find(max(l))
                             print("Finding profile ID")
