@@ -80,7 +80,7 @@ async def Update_Users():
         Total +=1
         print(1)
         try:    
-            user = guild.get_member(int(x["_id"])
+            user = guild.get_member(int(x["_id"]))
             print(2)
         except:     
             print(3)
