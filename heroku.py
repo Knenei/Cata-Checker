@@ -44,10 +44,8 @@ async def HypixelCon(endpoint, **kwargs):
             return _json, _status
 
 
-
 async def find(exp:int):
-    n = 0
-    j = MongoCon('config').find_one({"_id":"Dungeons"})
+    j, n = MongoCon('config').find_one({"_id":"Dungeons"}), 0
     for x in j['info']:
         if x['total'] > exp:
             return n
@@ -69,7 +67,7 @@ async def help(ctx):
     Help = discord.Embed(title=f"{client.user.name}#{client.user.discriminator}'s Comand Help Page", description=f"**Bot Prefix**=`{prefix}`")
     Help.set_footer(text="Don't DM Knei#4714 with complaints")
     Help.add_field(name="link",value= f"aliases: `['sync', 's', 'l']`\nCommand: `{prefix}link <IGN>`\nRoles Required: `Jr Carrier, Sr Carrier`")
-    if (arole or brole) in ctx.author.roles:
+    if arole or brole in ctx.author.roles:
         Help.add_field(name="removeuser", value=f"aliases: `[ru, deleteuser, du]`\nCommand: `{prefix}removeuser <User>`\nRoles Required: `Carrier Manager, Staff Team`")
     try:
         await ctx.author.send(embed=Help)
@@ -86,19 +84,12 @@ async def Update_Users():
     print("Updating...")
     for x in MongoCon('users').find():
         Total +=1
-        try:    
-            user = guild.get_member(int(x["_id"]))
-        except:     
-            pass
+        try:    user = guild.get_member(int(x["_id"]))
+        except:    pass
         else:  
             try:
-                if role in user.roles: 
-                    UserUnknown+=1
-                    pass
-                else:
-                    if user == None:  
-                        UsersNo+=1
-                    else: 
+                if role not in user.roles: 
+                    if user is not None:  
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
                         if s == 200 and j["success"] == True: 
                             rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
@@ -108,16 +99,15 @@ async def Update_Users():
                         else:   
                             onick = None
                         nnick = f"[{rank}] {x['ign']}"
-                        if onick == nnick:  
-                            UsersNo+=1
-                        else: 
+                        if onick != nnick:
                             await user.edit(nick = nnick)
-                            UsersUp+=1
-            except: 
-                UserUnknown+=1
+                            UsersUp+=1  
+                        else:   UsersNo+=1 
+                    else:   UsersNo+=1
+                else:   UserUnknown+=1
+            except:     UserUnknown+=1
     print("Update Finished!")
-    if Total !=0:
-        print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
+    if Total !=0: print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
     else: print("No users in database")
       
 
