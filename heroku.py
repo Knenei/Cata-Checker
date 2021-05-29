@@ -176,7 +176,7 @@ async def on_sync_error(ctx, error):
 
 
 @client.command(aliases = ["ru", "deleteuser", "du"])
-@commands.has_any_role(719848521813196951, 719848521813196951)
+@commands.has_any_role(719848521813196951, 846825420993331203)
 async def removeuser(ctx, user: discord.Member):
     try:
         MongoCon('users').delete_one({"_id":user.id})
