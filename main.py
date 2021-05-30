@@ -69,6 +69,7 @@ async def help(ctx):
     Help.add_field(name="link",value= f"aliases: `['sync', 's', 'l']`\nCommand: `{prefix}link <IGN>`\nRoles Required: `Jr Carrier, Sr Carrier`")
     if arole or brole in ctx.author.roles:
         Help.add_field(name="removeuser", value=f"aliases: `[ru, deleteuser, du]`\nCommand: `{prefix}removeuser <User>`\nRoles Required: `Carrier Manager, Staff Team`")
+        Help.add_field(name="massremoveusers", value=f"aliases: `[mru, massdeleteuser, mdu]\nCommand: `{prefix}massremoveusers [users as mentions or IDs]`")
     try:
         await ctx.author.send(embed=Help)
         await ctx.send("Check your DM's")
