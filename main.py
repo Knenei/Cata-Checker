@@ -92,7 +92,7 @@ async def Update_Users():
         else:  
             try:  
                 if role not in user.roles: 
-                    if (role1 or role2) in user.roles: 
+                    if role1 in user.roles or role2 in user.roles: 
                         if user is not None:  
                             j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
                             if s == 200 and j["success"] == True: 
