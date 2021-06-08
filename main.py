@@ -91,22 +91,24 @@ async def Update_Users():
         except:    pass
         else:  
             try:  
-                if role not in user.roles and (role1 or role2) in user.roles: 
-                    if user is not None:  
-                        j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
-                        if s == 200 and j["success"] == True: 
-                            rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
-                        else: raise Exception
-                        if user.nick != None:   
-                            onick = user.nick
-                        else:   
-                            onick = None
-                        nnick = f"[{rank}] {x['ign']}"
-                        if onick != nnick:
-                            await user.edit(nick = nnick)
-                            UsersUp+=1  
-                        else:   UsersNo+=1 
-                    else:   UsersNo+=1
+                if role not in user.roles: 
+                    if (role1 or role2) in user.roles: 
+                        if user is not None:  
+                            j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
+                            if s == 200 and j["success"] == True: 
+                                rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
+                            else: raise Exception
+                            if user.nick != None:   
+                                onick = user.nick
+                            else:   
+                                onick = None
+                            nnick = f"[{rank}] {x['ign']}"
+                            if onick != nnick:
+                                await user.edit(nick = nnick)
+                                UsersUp+=1  
+                            else:   UsersNo+=1 
+                        else:   UsersNo+=1
+                    else: UserUnknown+=1
                 else:   UserUnknown+=1
             except:  UserUnknown+=1
     print("Update Finished!")
