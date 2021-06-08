@@ -82,35 +82,31 @@ async def Update_Users():
     Total = UsersUp = UsersNo = UserUnknown = 0
     guild = client.get_guild(masterguild)
     role = discord.utils.get(guild.roles, id=AdminRole)
-    role1 = discord.utils.get(guild.roles, id = 843248725190508564)
-    role2 = discord.utils.get(guild.roles, id = 843249027411607552)
     print("Updating...")
     for x in MongoCon('users').find():
         Total +=1
         try:    user = guild.get_member(int(x["_id"]))
         except:    pass
         else:  
-            try:  
+            try:
                 if role not in user.roles: 
-                    if role1 in user.roles or role2 in user.roles: 
-                        if user is not None:  
-                            j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
-                            if s == 200 and j["success"] == True: 
-                                rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
-                            else: raise Exception
-                            if user.nick != None:   
-                                onick = user.nick
-                            else:   
-                                onick = None
-                            nnick = f"[{rank}] {x['ign']}"
-                            if onick != nnick:
-                                await user.edit(nick = nnick)
-                                UsersUp+=1  
-                            else:   UsersNo+=1 
-                        else:   UsersNo+=1
-                    else: UserUnknown+=1
+                    if user is not None:  
+                        j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
+                        if s == 200 and j["success"] == True: 
+                            rank = await find(j['profile']['members'][f"{x['uuid']}"]['dungeons']['dungeon_types']["catacombs"]["experience"])
+                        else: raise Exception
+                        if user.nick != None:   
+                            onick = user.nick
+                        else:   
+                            onick = None
+                        nnick = f"[{rank}] {x['ign']}"
+                        if onick != nnick:
+                            await user.edit(nick = nnick)
+                            UsersUp+=1  
+                        else:   UsersNo+=1 
+                    else:   UsersNo+=1
                 else:   UserUnknown+=1
-            except:  UserUnknown+=1
+            except:     UserUnknown+=1
     print("Update Finished!")
     if Total !=0: print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
     else: print("No users in database")
@@ -124,8 +120,8 @@ hel = """```scala
 6. If a book pops up, click "I understand"
 ```"""
 
-#@commands.has_any_role(843249027411607552, 843248725190508564, 719848521813196951)
 @client.command(aliases = ['l', 'link', 's'])
+@commands.has_any_role(843249027411607552, 843248725190508564, 719848521813196951)
 async def sync(ctx, User=None):
     con = MongoCon('users')
     if User != None:
@@ -162,25 +158,19 @@ async def sync(ctx, User=None):
                                     if max(l) == x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"]:
                                         profile = x["profile_id"]
                                 except: pass
-                            
-                            guild = client.get_guild(masterguild)
-                            role = get(guild.roles, id=AdminRole)
-                            role1 = discord.utils.get(guild.roles, id = 843248725190508564)
-                            role2 = discord.utils.get(guild.roles, id = 843249027411607552)
-                            con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
-                            if ctx.author.id == ctx.guild.owner.id:
-                                await ctx.send('Successfully Linked')
-                            elif role not in ctx.author.roles and (role1 or role2) in ctx.author.roles:
-                                await ctx.author.edit(nick=f'[{level}] {User}')
-                                await ctx.send('Successfully Linked')   
-                            else: 
-                                try:
+                            try:
+                                guild = client.get_guild(masterguild)
+                                role = get(guild.roles, id=AdminRole)
+                                if role not in ctx.author.roles:
                                     await ctx.author.edit(nick=f'[{level}] {User}')
+                                    con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
                                     await ctx.send('Successfully Linked')   
-                                except:
-                                    await ctx.send('Successfully Linked')  
+                                else: 
+                                    con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
+                                    await ctx.send('Successfully Linked')   
+
         #Was lazy so I shoved all the fails down here
-                            #except: await ctx.send('There was an error. Please Try again.')
+                            except: await ctx.send('There was an error. Please Try again.')
                         else: await ctx.send('Failed to connect to the skyblock profile endpoint.\nPlease try again.')
                     else: await ctx.send('The given discord does not match yours')  
                 else: await ctx.send('Failed to connect to Hypixel API please try again\nIf this happens multiple times the API might be down')
@@ -237,25 +227,5 @@ async def massremoveusers(ctx, *user: discord.Member):
         message = f"\nAll {Removed} users removed!"
     await msg.edit(content=f"Purge Completed!{message[:-2]}")
 
-@client.command()
-async def ScamCheck(ctx, user=None):
-  ext = ''
-  uuid = ''
-  if user != None:
-    uuid =MojangAPI.get_uuid(user)
-    ext = '?uuid='+uuid
-    if 'None' in ext:
-      await ctx.send("Invalid IGN")
-
-  async with aiohttp.ClientSession() as s:
-      async with s.request("GET", "https://api.skybrokers.xyz/scammer") as r:
-          _json = await r.json()
-          _status = r.status
-  
-  if _status == 200:
-      try:
-          await ctx.send("This user is on the scammer list for:\n"+_json[uuid.replace('-', '')]['reason'])
-      except:
-          await ctx.send("This user isn't on the scammer list!")
 
 client.run(os.environ["Carrier"])

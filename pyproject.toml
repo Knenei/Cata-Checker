@@ -11,7 +11,6 @@ mojang = "^0.1.8"
 aiohttp = "^3.7.4"
 pymongo = "^3.11.4"
 dnspython = "^2.1.0"
-Flask = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
 
