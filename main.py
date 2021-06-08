@@ -162,25 +162,25 @@ async def sync(ctx, User=None):
                                     if max(l) == x['members'][f'{UUID}']['dungeons']['dungeon_types']["catacombs"]["experience"]:
                                         profile = x["profile_id"]
                                 except: pass
-                            try:
-                                guild = client.get_guild(masterguild)
-                                role = get(guild.roles, id=AdminRole)
-                                role1 = discord.utils.get(guild.roles, id = 843248725190508564)
-                                role2 = discord.utils.get(guild.roles, id = 843249027411607552)
-                                con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
-                                if ctx.author.id == ctx.guild.owner.id:
-                                    await ctx.send('Successfully Linked')
-                                elif role not in ctx.author.roles and (role1 or role2) in ctx.author.roles:
+                            
+                            guild = client.get_guild(masterguild)
+                            role = get(guild.roles, id=AdminRole)
+                            role1 = discord.utils.get(guild.roles, id = 843248725190508564)
+                            role2 = discord.utils.get(guild.roles, id = 843249027411607552)
+                            con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
+                            if ctx.author.id == ctx.guild.owner.id:
+                                await ctx.send('Successfully Linked')
+                            elif role not in ctx.author.roles and (role1 or role2) in ctx.author.roles:
+                                await ctx.author.edit(nick=f'[{level}] {User}')
+                                await ctx.send('Successfully Linked')   
+                            else: 
+                                try:
                                     await ctx.author.edit(nick=f'[{level}] {User}')
                                     await ctx.send('Successfully Linked')   
-                                else: 
-                                    try:
-                                        await ctx.author.edit(nick=f'[{level}] {User}')
-                                        await ctx.send('Successfully Linked')   
-                                    except:
-                                        await ctx.send('Successfully Linked')  
+                                except:
+                                    await ctx.send('Successfully Linked')  
         #Was lazy so I shoved all the fails down here
-                            except: await ctx.send('There was an error. Please Try again.')
+                            #except: await ctx.send('There was an error. Please Try again.')
                         else: await ctx.send('Failed to connect to the skyblock profile endpoint.\nPlease try again.')
                     else: await ctx.send('The given discord does not match yours')  
                 else: await ctx.send('Failed to connect to Hypixel API please try again\nIf this happens multiple times the API might be down')
