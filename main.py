@@ -231,21 +231,13 @@ async def massremoveusers(ctx, *user: discord.Member):
 
 
 @client.command(aliases = ['sc'])
-async def ScamCheck(ctx, IGN):
-  uuid = MojangAPI.get_uuid(IGN)
-  if uuid != None:
-    reply = requests.get("https://api.skybrokers.xyz/scammer?uuid="+uuid).json()
-    if "scammer" in reply:
-      await ctx.send(IGN + " is not on the scammer list!")
-    else:
-      await ctx.send(IGN + " is on the scammer list!")
-  else:
-    reply = requests.get("https://api.skybrokers.xyz/scammer").json()
-    try:
-      a = reply[uuid]
-      await ctx.send(IGN + " is on the scammer list!")
-    except KeyError:
-      await ctx.send(IGN + " is not on the scammer list!")
-    
-
+async def ScamCheck(ctx, IGN=None):
+  if IGN != None:
+      uuid = MojangAPI.get_uuid(IGN)
+      if uuid != None:
+        reply = requests.get("https://api.skybrokers.xyz/scammer?uuid="+uuid).json()
+        if "scammer" in reply: await ctx.send(IGN + " is not on the scammer list!")
+        else: await ctx.send(IGN + " is on the scammer list!")
+      else: await ctx.send("Please Provide a Valid Username!")
+    else: await ctx.send("Please Provide a Username!")
 client.run(os.environ["Carrier"])
