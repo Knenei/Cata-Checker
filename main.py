@@ -67,6 +67,7 @@ async def help(ctx):
     Help = discord.Embed(title=f"{client.user.name}#{client.user.discriminator}'s Comand Help Page", description=f"**Bot Prefix**=`{prefix}`")
     Help.set_footer(text="Don't DM Knei#4714 with complaints")
     Help.add_field(name="link",value= f"aliases: `['sync', 's', 'l']`\nCommand: `{prefix}link <IGN>`\nIf you need link help replace IGN with help\nRoles Required: `Jr Carrier, Sr Carrier`")
+    Help.add_field(name="ScamCheck",value=f"aliases: `['sc']`\nCommand: `{prefix}ScamCheck <IGN>`\nAsk Delta Why This Was Needed again")
     if arole or brole in ctx.author.roles:
         Help.add_field(name="removeuser", value=f"aliases: `[ru, deleteuser, du]`\nCommand: `{prefix}removeuser <User>`\nRoles Required: `Carrier Manager, Staff Team`")
         Help.add_field(name="massremoveusers", value=f"aliases: `[mru, massdeleteuser, mdu]\nCommand: `{prefix}massremoveusers [users as mentions or IDs]`")
@@ -227,5 +228,23 @@ async def massremoveusers(ctx, *user: discord.Member):
         message = f"\nAll {Removed} users removed!"
     await msg.edit(content=f"Purge Completed!{message[:-2]}")
 
+
+@client.command(aliases = ['sc'])
+async def ScamCheck(ctx, IGN):
+  uuid = MojangAPI.get_uuid(IGN)
+  if uuid != None:
+    reply = requests.get("https://api.skybrokers.xyz/scammer?uuid="+uuid).json()
+    if "scammer" in reply:
+      await ctx.send(IGN + " is not on the scammer list!")
+    else:
+      await ctx.send(IGN + " is on the scammer list!")
+  else:
+    reply = requests.get("https://api.skybrokers.xyz/scammer").json()
+    try:
+      a = reply[uuid]
+      await ctx.send(IGN + " is on the scammer list!")
+    except KeyError:
+      await ctx.send(IGN + " is not on the scammer list!")
+    
 
 client.run(os.environ["Carrier"])
