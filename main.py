@@ -19,8 +19,8 @@ client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive =
 masterguild = int(os.environ["MGUILD"])
 AdminRole = 719848521813196951
 # Cata Update Frequency
-second = 0
-minute = 5
+second = 30
+minute = 2
 hour = 0
 
 #Code
