@@ -9,7 +9,7 @@ from discord.utils import get
 from discord.ext import commands, tasks
 
 #Version 1.3.0
-
+owner = 418531067008647169
 # config (Update as you see fit)
 prefix = "%"
 #please dont mess with ▽▽▽▽ thanks :)
@@ -123,6 +123,16 @@ async def Update_Users():
     if Total !=0: print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
     else: print("No users in database")
       
+@Update_Users.error()
+async def on_error(error):
+    Knei = client.get_guild(masterguild).get_member(owner)
+    await Knei.send(error)
+
+@client.event
+async def on_command_error(ctx, error):
+    Knei = client.get_guild(masterguild).get_member(owner)
+    await Knei.send(error)
+
 hel = """```scala
 1. Type "/profile" in the in-game chat and press enter
 2. Find the icon called "Social Media"
