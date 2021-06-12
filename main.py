@@ -11,10 +11,11 @@ from discord.ext import commands, tasks
 
 # config (Update as you see fit)
 prefix = "%"
+#please dont mess with ▽▽▽▽ thanks :)
 intents = discord.Intents.default()
-intents.members = True
+intents.members = True 
 client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive = True)
-#please dont mess with ^^^^ thanks :)
+#please dont mess with △△△△ thanks :)
 masterguild = int(os.environ["MGUILD"])
 AdminRole = 719848521813196951
 # Cata Update Frequency
@@ -96,7 +97,7 @@ async def Update_Users():
             try:
                 if user is not None:  
                     if role in user.roles: 
-                        pass
+                        UserUnknown+=1
                     elif Sr or Jr in user.roles:
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
                         if s == 200 and j["success"] == True: 
