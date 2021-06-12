@@ -8,6 +8,7 @@ from mojang import MojangAPI
 from discord.utils import get
 from discord.ext import commands, tasks
 
+#Version 1.3.0
 
 # config (Update as you see fit)
 prefix = "%"
@@ -260,5 +261,10 @@ async def sync(ctx):
                     name = ctx.author.name
                 level = await find(j["profile"]["members"][x["uuid"]]["dungeons"]["dungeon_types"]["catacombs"]["experience"])
                 await ctx.author.edit(nick=f"[{level}] {name}")
+                await ctx.send("Cata Level Updated!")
+                return
+            else:
+                await ctx.send("There was an error connecting to hypixel API")
+    await ctx.send("You aren't linked!")
 
 client.run(os.environ["Carrier"])
