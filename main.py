@@ -20,7 +20,7 @@ masterguild = int(os.environ["MGUILD"])
 AdminRole = 719848521813196951
 # Cata Update Frequency
 second = 0
-minute = 1
+minute = 5
 hour = 0
 
 #Code
@@ -98,7 +98,7 @@ async def Update_Users():
                 if user is not None:  
                     if role in user.roles: 
                         UserUnknown+=1
-                    elif Sr or Jr in user.roles:
+                    elif Sr in user.roles or Jr in user.roles:
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
                         if s == 200 and j["success"] == True: 
                             rank = await find(j["profile"]["members"][x["uuid"]]["dungeons"]["dungeon_types"]["catacombs"]["experience"])
