@@ -124,7 +124,7 @@ async def Update_Users():
     else: print("No users in database")
       
 @Update_Users.error()
-async def on_error(error):
+async def on_error(ctx, error):
     Knei = client.get_guild(masterguild).get_member(owner)
     await Knei.send(error)
 
