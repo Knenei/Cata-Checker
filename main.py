@@ -16,7 +16,7 @@ intents = discord.Intents.default()
 intents.members = True 
 client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive = True)
 #please dont mess with △△△△ thanks :)
-masterguild = int(os.environ["MGUILD"])
+masterguild = 715801930877894706
 AdminRole = 719848521813196951
 # Cata Update Frequency
 second = 30
@@ -41,6 +41,7 @@ async def HypixelCon(endpoint, **kwargs):
             other += f"&{key}={val}"
     async with aiohttp.ClientSession() as s:
         async with s.request("GET", "https://api.hypixel.net/"+endpoint+"?key="+os.environ["HYPY"]+other) as r:
+            print("https://api.hypixel.net/"+endpoint+"?key=")
             _json = await r.json()
             _status = r.status
             return _json, _status
@@ -58,7 +59,7 @@ async def find(exp:int):
 @client.event
 async def on_ready():
     print("Logged in as " + client.user.name + "#" + client.user.discriminator)
-    await Update_Users.start()
+    #await Update_Users.start()
 
 
 @client.command() 
@@ -100,6 +101,7 @@ async def Update_Users():
                         UserUnknown+=1
                     elif Sr in user.roles or Jr in user.roles:
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
+                        print(j)
                         if s == 200 and j["success"] == True: 
                             rank = await find(j["profile"]["members"][x["uuid"]]["dungeons"]["dungeon_types"]["catacombs"]["experience"])
                         else: raise Exception
@@ -125,12 +127,12 @@ async def Update_Users():
 @Update_Users.error
 async def on_error(ctx, error):
     Knei = client.get_guild(masterguild).get_member(owner)
-    await Knei.send(error)
+    await Knei.send(error.replace(os.environ["HYPY"], "KEY"))
 
 @client.event
 async def on_command_error(ctx, error):
     Knei = client.get_guild(masterguild).get_member(owner)
-    await Knei.send(error)
+    await Knei.send(error.replace(os.environ["HYPY"], "KEY"))
 
 hel = """```scala
 1. Type "/profile" in the in-game chat and press enter
@@ -283,17 +285,23 @@ async def sync(ctx):
 async def runThrough(ctx):
   con = MongoCon("users")
   guild = client.get_guild(masterguild)
-  mod = get(guild.roles, id=AdminRole).members()
-  Jr = get(guild.roles, id=843249027411607552).memebers()
-  Sr = get(guild.roles, id=843248725190508564).members()
+  mod = get(guild.roles, id=AdminRole).members
+  Jr = get(guild.roles, id=843249027411607552).members
+  Sr = get(guild.roles, id=843248725190508564).members
+  li = [Jr, Sr]
+  l, strs = [], ""
   msg = await ctx.send("Searching...")
-  for x in con.find():
-    if x["_id"] in mod: pass
-    elif x["_id"] in Jr:
-      Jr.remove(x["id"])
-    elif x["_id"] in Sr:
-      Sr.remove(x["_id"])
-    else:
-      msg = await msg.edit(msg.content + " <@{}>[{}]".format(x["_id"], x["_id"]))
+  for z in li:
+    for y in z:
+      r=con.find_one({"_id":y.id})
+      if type(r) != dict:
+        if y not in mod:
+          l.append(y.id)
+  msg1 = await ctx.send("Missing Users:")
+  for x in l:
+    strs += "<@{}>[{}]\n".format(x, x)
+  print(strs)
+  await msg1.edit(content=msg1.content+"\n"+strs+"\nTotal Missing: "+len(l))
+  await msg.edit(content="Search completed")
     
 client.run(os.environ["Carrier"])
