@@ -127,12 +127,12 @@ async def Update_Users():
 @Update_Users.error
 async def on_error(ctx, error):
     Knei = client.get_guild(masterguild).get_member(owner)
-    await Knei.send(error.replace(os.environ["HYPY"], "KEY"))
+    await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
 
 @client.event
 async def on_command_error(ctx, error):
     Knei = client.get_guild(masterguild).get_member(owner)
-    await Knei.send(error.replace(os.environ["HYPY"], "KEY"))
+    await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
 
 hel = """```scala
 1. Type "/profile" in the in-game chat and press enter
@@ -301,7 +301,7 @@ async def runThrough(ctx):
   for x in l:
     strs += "<@{}>[{}]\n".format(x, x)
   print(strs)
-  await msg1.edit(content=msg1.content+"\n"+strs+"\nTotal Missing: "+len(l))
+  #await msg1.edit(content=msg1.content+"\n"+strs+"\nTotal Missing: "+len(l))
   await msg.edit(content="Search completed")
     
 client.run(os.environ["Carrier"])
