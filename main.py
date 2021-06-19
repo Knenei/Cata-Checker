@@ -3,7 +3,6 @@ import asyncio
 import aiohttp
 import discord
 import pymongo
-import requests
 from mojang import MojangAPI
 from discord.utils import get
 from discord.ext import commands, tasks
@@ -246,7 +245,7 @@ async def massremoveusers(ctx, *user: discord.Member):
 
 @client.command(aliases = ["sc"])
 async def ScamCheck(ctx, IGN=None):
-  await ctx.send("Currently broken cause rip.")
+  await ctx.send("Deprecated For Now.")
   #if IGN != None:
   #    uuid = MojangAPI.get_uuid(IGN)
   #    if uuid != None:
@@ -273,8 +272,28 @@ async def sync(ctx):
                 await ctx.author.edit(nick=f"[{level}] {name}")
                 await ctx.send("Cata Level Updated!")
                 return
-            else:
-                await ctx.send("There was an error connecting to hypixel API")
+            else: 
+              await ctx.send("There was an error connecting to hypixel API")
+              return
     await ctx.send("You aren't linked!")
 
+
+@client.command()
+@commands.has_any_role(719848521813196951, 846825420993331203)
+async def runThrough(ctx):
+  con = MongoCon("users")
+  guild = client.get_guild(masterguild)
+  mod = get(guild.roles, id=AdminRole).members()
+  Jr = get(guild.roles, id=843249027411607552).memebers()
+  Sr = get(guild.roles, id=843248725190508564).members()
+  msg = await ctx.send("Searching...")
+  for x in con.find():
+    if x["_id"] in mod: pass
+    elif x["_id"] in Jr:
+      Jr.remove(x["id"])
+    elif x["_id"] in Sr:
+      Sr.remove(x["_id"])
+    else:
+      msg = await msg.edit(msg.content + " <@{}>[{}]".format(x["_id"], x["_id"]))
+    
 client.run(os.environ["Carrier"])
