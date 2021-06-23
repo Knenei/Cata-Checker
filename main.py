@@ -100,7 +100,6 @@ async def Update_Users():
                         UserUnknown+=1
                     elif Sr in user.roles or Jr in user.roles:
                         j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
-                        print(j)
                         if s == 200 and j["success"] == True: 
                             rank = await find(j["profile"]["members"][x["uuid"]]["dungeons"]["dungeon_types"]["catacombs"]["experience"])
                         else: raise Exception
