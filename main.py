@@ -294,11 +294,32 @@ async def runThrough(ctx):
       r=con.find_one({"_id":y.id})
       if type(r) != dict:
         if y not in mod:
-          l.append(y.id)
-  msg1 = await ctx.send("Missing Users:")
+          l.append( y.id )
+  msg1 = await ctx.send( "Missing Users:" )
   for x in l:
-    strs += "<@{}>[{}]\n".format(x, x)
-  await msg1.edit(content=msg1.content+"\n"+strs+"\nTotal Missing: "+len(l))
-  await msg.edit(content="Search completed")
+    strs += "<@{}>[{}]\n".format( x, x )
+  await msg1.edit( content=msg1.content+"\n"+ strs +"\nTotal Missing: "+str( len( l ) ) )
+  await msg.edit( content="Search completed" )
     
-client.run(os.environ["Carrier"])
+
+
+
+@client.command()
+async def add(ctx):
+    pass
+@client.command()
+async def close(ctx):
+    pass
+@client.command()
+async def delete(ctx):
+    pass
+@client.command()
+async def claim(ctx):
+    pass
+@client.command()
+async def open(ctx):
+    pass
+
+
+
+client.run( os.environ[ "Carrier" ] )
