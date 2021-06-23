@@ -41,7 +41,6 @@ async def HypixelCon(endpoint, **kwargs):
             other += f"&{key}={val}"
     async with aiohttp.ClientSession() as s:
         async with s.request("GET", "https://api.hypixel.net/"+endpoint+"?key="+os.environ["HYPY"]+other) as r:
-            print("https://api.hypixel.net/"+endpoint+"?key=")
             _json = await r.json()
             _status = r.status
             return _json, _status
@@ -59,7 +58,7 @@ async def find(exp:int):
 @client.event
 async def on_ready():
     print("Logged in as " + client.user.name + "#" + client.user.discriminator)
-    #await Update_Users.start()
+    await Update_Users.start()
 
 
 @client.command() 
@@ -300,8 +299,7 @@ async def runThrough(ctx):
   msg1 = await ctx.send("Missing Users:")
   for x in l:
     strs += "<@{}>[{}]\n".format(x, x)
-  print(strs)
-  #await msg1.edit(content=msg1.content+"\n"+strs+"\nTotal Missing: "+len(l))
+  await msg1.edit(content=msg1.content+"\n"+strs+"\nTotal Missing: "+len(l))
   await msg.edit(content="Search completed")
     
 client.run(os.environ["Carrier"])
