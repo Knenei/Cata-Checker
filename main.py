@@ -76,7 +76,7 @@ async def help(ctx):
         Help.add_field(name="massremoveusers", value=f"aliases: `[mru, massdeleteuser, mdu]\nCommand: `{prefix}massremoveusers [users as mentions or IDs]`")
     try:
         await ctx.author.send(embed=Help)
-        await ctx.send("Check your DM's")
+        await ctx.send("Check your DMs")
     except:
         await ctx.send(embed=Help)
 
