@@ -47,7 +47,7 @@ async def HypixelCon(endpoint, **kwargs):
 
 
 async def find(exp:int):
-    j, n = MongoCon("config").find_one({"_id":"Dungeons"}), 0
+    j, n = MongoCon("config").find_one({"_id":"Dungeons_1"}), 0
     for x in j["info"]:
         if x["total"] > exp:
             return n
