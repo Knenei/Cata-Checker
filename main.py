@@ -94,7 +94,8 @@ async def Update_Users( ):
 
   start = datetime.now()
 
-  Total = UsersUp = UsersNo = UserUnknown = req = run = 0
+  Total = UsersUp = UsersNo = UserUnknown = run = 0
+  run += 1
   mon = MongoCon( 'users' )
   guild = client.get_guild(SSB)
   ST = get(guild.roles, id=StaffTeam).members
@@ -107,7 +108,6 @@ async def Update_Users( ):
   print( "Update has started!" )
 
   for profile in mon.find( ):
-    req += 1
     discord = guild.get_member( int( profile[ "_id" ] ) )
     if discord:
       Total += 1
@@ -130,9 +130,9 @@ async def Update_Users( ):
     else: 
       UserUnknown += 1
 
-    if req % 100 == 0 or datetime.now() > start + timedelta( seconds = 60*run ): 
+    if Total % 100 == 0 or datetime.now() > start + timedelta( seconds = 60*run ): 
       run += 1
-      await asyncio.sleep( ((start+timedelta(seconds=60*run))-datetime.now()).seconds if (start+timedelta( seconds = 60*run ) > datetime.now()) else (datetime.now()-(start+timedelta(seconds=60*run))).seconds)
+      await asyncio.sleep( ((start+timedelta(seconds=60*run))-datetime.now()) if (start+timedelta( seconds = 60*run ) > datetime.now()) else (datetime.now()-(start+timedelta(seconds=60*run))))
 
   print( "Update has finished!" )
   print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
