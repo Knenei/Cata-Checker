@@ -299,18 +299,22 @@ async def Update_Users( ):
     if discord:
       Total += 1
       if discord in AC and discord not in ST:
-        j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
-        if s != 204 and s < 400:
-          Level = find( j[ "profile" ][ "members" ][ profile[ "uuid" ] ][ "dungeons" ][ "dungeon_types" ][ "catacombs" ][ "experience" ] )
-          if not discord.nick or discord.nick != f"[{ Level }] { profile[ 'ign' ]}":
-            await discord.edit( nick = f"[{ Level }] { profile[ 'ign' ] }" )
-            UsersUp += 1
-            if discord not in SC + MC + UC and Level == 32:
-              await discord.add_roles( roles = [ SC ], reason = "Meets requirements for Senior Carrier")
-              await discord.remove_roles( roles = [ JC ], reason = "Met requirements for Senior Carrier")
+        try:
+          j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
+          if s != 204 and s < 400:
+            Level = find( j[ "profile" ][ "members" ][ profile[ "uuid" ] ][ "dungeons" ][ "dungeon_types" ][ "catacombs" ][ "experience" ] )
+            if not discord.nick or discord.nick != f"[{ Level }] { profile[ 'ign' ]}":
+              await discord.edit( nick = f"[{ Level }] { profile[ 'ign' ] }" )
+              UsersUp += 1
+              if discord not in SC + MC + UC and Level == 32:
+                await discord.add_roles( roles = [ SC ], reason = "Meets requirements for Senior Carrier")
+                await discord.remove_roles( roles = [ JC ], reason = "Met requirements for Senior Carrier")
+            else: 
+              UsersNo += 1
           else: 
-            UsersNo += 1
-        else: 
+            UserUnknown += 1
+        except:
+          print( profile )
           UserUnknown += 1
       else: 
         UserUnknown += 1
