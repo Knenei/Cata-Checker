@@ -237,7 +237,7 @@ def HypixelConnection( endpoint, **kwargs ):
   r = requests.get("https://api.hypixel.net/"+endpoint+"?key="+os.environ["HYPY"]+ot)
   json = r.json()
   status = r.status_code
-  return json, status
+  return [json, status]
 
 
 
