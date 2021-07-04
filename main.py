@@ -111,7 +111,7 @@ async def Update_Users( ):
         j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
         if s != 204 and s < 400:
           Level = find( j[ "profile" ][ "members" ][ profile[ "uuid" ] ][ "dungeons" ][ "dungeon_types" ][ "catacombs" ][ "experience" ] )
-          if not discord.nick or discord.nick != f"[{ Level }] { j[ 'ign' ]}":
+          if not discord.nick or discord.nick != f"[{ Level }] { profile[ 'ign' ]}":
             await discord.edit( nick = f"[{ Level }] { profile[ 'ign' ] }" )
             UsersUp += 1
             if discord not in SC + MC + UC and Level == 32:
