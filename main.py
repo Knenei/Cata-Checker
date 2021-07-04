@@ -23,7 +23,7 @@ SSB = 715801930877894706
 StaffTeam = 719848521813196951
 # Cata Update Frequency
 second = 0
-minute = 5
+minute = 15
 hour = 0
 
 
