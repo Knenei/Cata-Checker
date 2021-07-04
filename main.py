@@ -114,7 +114,7 @@ async def Update_Users( ):
           if not discord.nick or discord.nick != f"[{ Level }] { profile[ 'ign' ]}":
             await discord.edit( nick = f"[{ Level }] { profile[ 'ign' ] }" )
             UsersUp += 1
-            if discord not in SC + MC + UC and Level == 32:
+            if discord not in SC.members + MC.members + UC.members and Level == 32:
               await discord.add_roles( roles = [ SC ], reason = "Meets requirements for Senior Carrier")
               await discord.remove_roles( roles = [ JC ], reason = "Met requirements for Senior Carrier")
           else: 
