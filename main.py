@@ -78,7 +78,7 @@ class RateLimitException(Exception):
         self.period_remaining = period_remaining
 
 
-class RateLimitDecorator(object):
+class limits(object): # Formally Known As RateLimitDecorator(object):
     '''
     Rate limit decorator class.
     '''
