@@ -192,8 +192,8 @@ async def link( ctx, User = None ):
         return await ctx.send( f"{ User } as no linked Discord Accounts\n" + hel )
       if str( Discord ) == str( ctx.author ):
         print( 4 )
-        j2, s2 = HypixelConnection( "skyblock/profiles", uuid = UUID )
-        if s2 != 200 and s2 < 400:
+        j2, s2 = HypixelConnection( "skyblock/profiles", uuid = UUID ) 
+        if s2 != 204 and s2 < 400:
           Profile, CataExp = "", 0
           print( 5 )
           for x in j2[ "profiles" ]:
