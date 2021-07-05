@@ -39,7 +39,7 @@ def MongoCon(typ):
   elif typ == "config":
     return client.discord.config
 
-@limits( calls = 100, period = 60 )
+@limits( calls = 120, period = 60 )
 def HypixelConnection( endpoint, **kwargs ):
   ot = ""
   if kwargs:
