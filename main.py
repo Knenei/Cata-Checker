@@ -186,7 +186,7 @@ async def sleep_and_retry(func):
                 #time.sleep(exception.period_remaining)
                 #asyncio.run( AsyncSleep( exception.period_remaining ) )
                 await AsyncSleep( exception.period_remaining )
-    return wrapper
+    return await wrapper
 
 # =================================================================================
 #
