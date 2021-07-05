@@ -162,7 +162,7 @@ async def AsyncSleep( time ):
     await asyncio.sleep( time )
 
 
-def sleep_and_retry():
+def sleep_and_retry( func ):
   '''
   Return a wrapped function that rescues rate limit exceptions, sleeping the
   current thread until rate limit resets.
@@ -189,8 +189,8 @@ def sleep_and_retry():
           #asyncio.run( AsyncSleep( exception.period_remaining ) )
           await asyncio.sleep( exception.period_remaining )
           return func(*args, **kargs)
-    return wrapper
-  return wrapp
+    return wrapper( func )
+  return wrapp( func )
 
 # =================================================================================
 #
