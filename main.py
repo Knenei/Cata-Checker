@@ -161,32 +161,36 @@ class limits(object): # Formally Known As RateLimitDecorator(object):
 async def AsyncSleep( time ):
     await asyncio.sleep( time )
 
-async def sleep_and_retry(func):
-    '''
-    Return a wrapped function that rescues rate limit exceptions, sleeping the
-    current thread until rate limit resets.
 
-    :param function func: The function to decorate.
-    :return: Decorated function.
-    :rtype: function
-    '''
+def sleep_and_retry():
+  '''
+  Return a wrapped function that rescues rate limit exceptions, sleeping the
+  current thread until rate limit resets.
+
+  :param function func: The function to decorate.
+  :return: Decorated function.
+  :rtype: function
+  '''
+  def wrapp( func ):
     @wraps(func)
     async def wrapper(*args, **kargs):
-        '''
-        Call the rate limited function. If the function raises a rate limit
-        exception sleep for the remaing time period and retry the function.
+      '''
+      Call the rate limited function. If the function raises a rate limit
+      exception sleep for the remaing time period and retry the function.
 
-        :param args: non-keyword variable length argument list to the decorated function.
-        :param kargs: keyworded variable length argument list to the decorated function.
-        '''
-        while True:
-            try:
-                return func(*args, **kargs)
-            except RateLimitException as exception:
-                #time.sleep(exception.period_remaining)
-                #asyncio.run( AsyncSleep( exception.period_remaining ) )
-                await AsyncSleep( exception.period_remaining )
-    return await wrapper
+      :param args: non-keyword variable length argument list to the decorated function.
+      :param kargs: keyworded variable length argument list to the decorated function.
+      '''
+      while True:
+        try:
+          return func(*args, **kargs)
+        except RateLimitException as exception:
+          #time.sleep(exception.period_remaining)
+          #asyncio.run( AsyncSleep( exception.period_remaining ) )
+          await asyncio.sleep( exception.period_remaining )
+          return func(*args, **kargs)
+    return wrapper
+  return wrapp
 
 # =================================================================================
 #
