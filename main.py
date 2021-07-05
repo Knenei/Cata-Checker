@@ -175,9 +175,9 @@ async def link( ctx, User = None ):
     return await ctx.send( "Please provide a username!" )
   if User.lower() == 'help':
     return await ctx.send( hel )
-  if db.collection.count_documents({ '_id': ctx.author.id }, limit = 1) != 0:
+  if con.count_documents({ '_id': ctx.author.id }, limit = 1) != 0:
     return await ctx.send( "You are already linked to " + str(con.find( { "_id" : ctx.author.id } )[ "ign" ] ) )
-  if db.collection.count_documents({ 'ign': User }, limit = 1) != 0:
+  if con.count_documents({ 'ign': User }, limit = 1) != 0:
     return await ctx.send( "This Username is already linked to another user!" )
   UUID = MojangAPI.get_uuid( User )
   if UUID:
