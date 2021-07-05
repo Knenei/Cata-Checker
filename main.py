@@ -203,8 +203,8 @@ async def link( ctx, User = None ):
                 print( 7 )
                 CataExp = x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"]
                 Profile = x
-             except KeyError:
-               pass
+            except KeyError:
+              pass
           print( 8 )
           CataLevel = find( CataExp )
           if ctx.author not in ST:
