@@ -171,7 +171,6 @@ def sleep_and_retry( func ):
   :return: Decorated function.
   :rtype: function
   '''
-  def wrapp( func ):
     @wraps(func)
     async def wrapper(*args, **kargs):
       '''
@@ -183,14 +182,13 @@ def sleep_and_retry( func ):
       '''
       while True:
         try:
-          return func(*args, **kargs)
+          return await func(*args, **kargs)
         except RateLimitException as exception:
           #time.sleep(exception.period_remaining)
           #asyncio.run( AsyncSleep( exception.period_remaining ) )
           await asyncio.sleep( exception.period_remaining )
-          return func(*args, **kargs)
+          return await func(*args, **kargs)
     return wrapper( func )
-  return wrapp( func )
 
 # =================================================================================
 #
