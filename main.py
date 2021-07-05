@@ -163,14 +163,14 @@ async def AsyncSleep( time ):
 
 
 def sleep_and_retry( func ):
-  '''
-  Return a wrapped function that rescues rate limit exceptions, sleeping the
-  current thread until rate limit resets.
+    '''
+    Return a wrapped function that rescues rate limit exceptions, sleeping the
+    current thread until rate limit resets.
 
-  :param function func: The function to decorate.
-  :return: Decorated function.
-  :rtype: function
-  '''
+    :param function func: The function to decorate.
+    :return: Decorated function.
+    :rtype: function
+    '''
     @wraps(func)
     async def wrapper(*args, **kargs):
       '''
