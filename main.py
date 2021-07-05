@@ -185,7 +185,7 @@ async def sleep_and_retry(func):
             except RateLimitException as exception:
                 #time.sleep(exception.period_remaining)
                 #asyncio.run( AsyncSleep( exception.period_remaining ) )
-                await AsyncSleep( exception.period_remaining ) )
+                await AsyncSleep( exception.period_remaining )
     return wrapper
 
 # =================================================================================
