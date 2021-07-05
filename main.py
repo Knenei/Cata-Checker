@@ -229,7 +229,7 @@ def MongoCon(typ):
 
 
 
-@sleep_and_retry
+#@sleep_and_retry
 @limits( calls = 100, period = 60 )
 def HypixelConnection( endpoint, **kwargs ):
   ot = ""
@@ -301,23 +301,23 @@ async def Update_Users( ):
     if discord:
       Total += 1
       if discord in AC and discord not in ST:
-        #try:
+        try:
           j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
-          if s != 204 and s < 400:
-            Level = find( j[ "profile" ][ "members" ][ profile[ "uuid" ] ][ "dungeons" ][ "dungeon_types" ][ "catacombs" ][ "experience" ] )
-            if not discord.nick or discord.nick != f"[{ Level }] { profile[ 'ign' ]}":
-              await discord.edit( nick = f"[{ Level }] { profile[ 'ign' ] }" )
-              UsersUp += 1
-              if discord not in SC + MC + UC and Level == 32:
-                await discord.add_roles( roles = [ SC ], reason = "Meets requirements for Senior Carrier")
-                await discord.remove_roles( roles = [ JC ], reason = "Met requirements for Senior Carrier")
-            else: 
-              UsersNo += 1
+        except RateLimitException as exception:
+          await asyncio.sleep( exception.period_remaining )
+          j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
+        if s != 204 and s < 400:
+          Level = find( j[ "profile" ][ "members" ][ profile[ "uuid" ] ][ "dungeons" ][ "dungeon_types" ][ "catacombs" ][ "experience" ] )
+          if not discord.nick or discord.nick != f"[{ Level }] { profile[ 'ign' ]}":
+            await discord.edit( nick = f"[{ Level }] { profile[ 'ign' ] }" )
+            UsersUp += 1
+            if discord not in SC + MC + UC and Level == 32:
+              await discord.add_roles( roles = [ SC ], reason = "Meets requirements for Senior Carrier")
+              await discord.remove_roles( roles = [ JC ], reason = "Met requirements for Senior Carrier")
           else: 
-            UserUnknown += 1
-        #except:
-        #  print( profile )
-        #  UserUnknown += 1
+            UsersNo += 1
+        else: 
+          UserUnknown += 1
       else: 
         UserUnknown += 1
     else: 
@@ -325,40 +325,6 @@ async def Update_Users( ):
 
   print( "Update has finished!" )
   print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
-
-#  print("Updating...")
-#  for x in MongoCon("users").find():
-#    Total +=1
-#    try:  user = guild.get_member(int(x["_id"]))
-#    except:  pass
-#    else:  
-#      try:
-#        if user is not None:  
-#          if role in user.roles: 
-#            UserUnknown+=1
-#          elif Sr in user.roles or Jr in user.roles:
-#            j, s = await HypixelCon("skyblock/profile", profile = x["profile"])
-#            if s == 200 and j["success"] == True: 
-#              rank = await find(j["profile"]["members"][x["uuid"]]["dungeons"]["dungeon_types"]["catacombs"]["experience"])
-#            else: raise Exception
-#            if user.nick != None:   
-#              onick = user.nick
-#            else:   
-#              onick = None
-#            nnick = f"[{rank}] {x['ign']}"
-#            if onick != nnick:
-#              await user.edit(nick = nnick)
-#              UsersUp+=1  
-#            else:   UsersNo+=1 
-#            if Sr not in user.roles and int(rank) >= 32:
-#              await user.add_roles(roles=Sr,reason="Meet catacombs requirments")
-#              await user.remove_roles(roles=Jr,reason="Has Senior Carrier")
-#          else:   UsersNo+=1
-#        else:   UserUnknown+=1
-#      except:   UserUnknown+=1
-#  print("Update Finished!")
-#  if Total !=0: print("Users Updated: {:2.1%}\nUsers Not Changed: {:2.1%}\nUsers Ignored/Not Found: {:2.1%}\nTotal Users: {}".format(UsersUp/Total, UsersNo/Total, UserUnknown/Total, Total))
-#  else: print("No users in database")
 
 
 @Update_Users.error
@@ -434,57 +400,6 @@ async def link( ctx, User = None ):
   else:
     return await ctx.send( f"{ User } is not a valid Minecraft Account!" )
   
-#  if User.lower() != "help":
-#    if User != None:
-#      UUID = MojangAPI.get_uuid(User)
-#      User = MojangAPI.get_username(UUID)
-#      for x in con.find():
-#        if x["_id"] == ctx.author.id:
-#          if Jr or Sr in ctx.author.roles:
-#            await ctx.send("You are already linked!")
-#            return
-#        elif x["uuid"] == UUID: 
-#          await ctx.send("This minecraft account is already linked!")
-#          return
-#      if UUID != None:
-#        j, s = await HypixelCon("player",uuid=UUID)
-#        if s == 200:
-#          try:  
-#            discord = j["player"]["socialMedia"]["links"]["DISCORD"]
-#          except KeyError: 
-#            await ctx.send(User + " has no linked discord account.\n"+hel)
-#          if str(discord)==str(ctx.author):
-#            l = []
-#            j, s = await HypixelCon("skyblock/profiles", uuid = UUID)
-#            if s == 200:
-#              for x in j["profiles"]: 
-#                try:  
-#                  l.append(x["members"][f"{UUID}"]["dungeons"]["dungeon_types"]["catacombs"]["experience"])
-#                except:
-#                  pass
-#              level = await find(max(l))
-#              for x in j["profiles"]:
-#                try:
-#                  if max(l) == x["members"][f"{UUID}"]["dungeons"]["dungeon_types"]["catacombs"]["experience"]:
-#                    profile = x["profile_id"]
-#                except: pass
-#              try:
-#                if role not in ctx.author.roles:
-#                  await ctx.author.edit(nick=f"[{level}] {User}")
-#                  con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
-#                  await ctx.send("Successfully Linked")   
-#                else: 
-#                  con.insert_one({"ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":profile})
-#                  await ctx.send("Successfully Linked")   
-#
-#    #Was lazy so I shoved all the fails down here
-#              except: await ctx.send("There was an error. Please Try again.")
-#            else: await ctx.send("Failed to connect to the skyblock profile endpoint.\nPlease try again.")
-#          else: await ctx.send("The given discord does not match yours")  
-#        else: await ctx.send("Failed to connect to Hypixel API please try again\nIf this happens multiple times the API might be down")
-#      else: await ctx.send("Invalid username")
-#    else: await ctx.send("Please provide a username")
-#  else: await ctx.send(hel)
 
 @client.command(aliases = ["ru", "deleteuser", "du"])
 @commands.has_any_role(719848521813196951, 846825420993331203)
