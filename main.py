@@ -228,7 +228,7 @@ def MongoCon(typ):
 
 
 @sleep_and_retry
-@limits( calls = 100, period = 61 )
+@limits( calls = 100, period = 60 )
 def HypixelConnection( endpoint, **kwargs ):
   ot = ""
   if kwargs:
@@ -299,7 +299,7 @@ async def Update_Users( ):
     if discord:
       Total += 1
       if discord in AC and discord not in ST:
-        try:
+        #try:
           j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
           if s != 204 and s < 400:
             Level = find( j[ "profile" ][ "members" ][ profile[ "uuid" ] ][ "dungeons" ][ "dungeon_types" ][ "catacombs" ][ "experience" ] )
@@ -313,9 +313,9 @@ async def Update_Users( ):
               UsersNo += 1
           else: 
             UserUnknown += 1
-        except:
-          print( profile )
-          UserUnknown += 1
+        #except:
+        #  print( profile )
+        #  UserUnknown += 1
       else: 
         UserUnknown += 1
     else: 
