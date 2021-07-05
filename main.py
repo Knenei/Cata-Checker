@@ -161,7 +161,7 @@ class limits(object): # Formally Known As RateLimitDecorator(object):
 async def AsyncSleep( time ):
     await asyncio.sleep( time )
 
-def sleep_and_retry(func):
+async def sleep_and_retry(func):
     '''
     Return a wrapped function that rescues rate limit exceptions, sleeping the
     current thread until rate limit resets.
@@ -171,7 +171,7 @@ def sleep_and_retry(func):
     :rtype: function
     '''
     @wraps(func)
-    def wrapper(*args, **kargs):
+    async def wrapper(*args, **kargs):
         '''
         Call the rate limited function. If the function raises a rate limit
         exception sleep for the remaing time period and retry the function.
@@ -184,8 +184,8 @@ def sleep_and_retry(func):
                 return func(*args, **kargs)
             except RateLimitException as exception:
                 #time.sleep(exception.period_remaining)
-                asyncio.run( AsyncSleep( exception.period_remaining ) )
-                
+                #asyncio.run( AsyncSleep( exception.period_remaining ) )
+                await AsyncSleep( exception.period_remaining ) )
     return wrapper
 
 # =================================================================================
