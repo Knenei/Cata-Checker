@@ -175,9 +175,9 @@ async def link( ctx, User = None ):
     return await ctx.send( "Please provide a username!" )
   if User.lower() == 'help':
     return await ctx.send( hel )
-  if con.count_documents({ '_id': ctx.author.id }, limit = 1) != 0:
+  if con.count_documents( { '_id': ctx.author.id }, limit = 1 ) != 0:
     return await ctx.send( "You are already linked to " + str(con.find( { "_id" : ctx.author.id } )[ "ign" ] ) )
-  if con.count_documents({ 'ign': User }, limit = 1) != 0:
+  if con.count_documents( { 'ign': User }, limit = 1 ) != 0:
     return await ctx.send( "This Username is already linked to another user!" )
   UUID = MojangAPI.get_uuid( User )
   if UUID:
@@ -190,7 +190,7 @@ async def link( ctx, User = None ):
         Discord = j1[ "player" ][ "socialMedia" ][ "links" ][ "DISCORD" ]
       except: 
         return await ctx.send( f"{ User } as no linked Discord Accounts\n" + hel )
-      if Discord == ctx.author:
+      if str( Discord ) == str( ctx.author ):
         print( 4 )
         j2, s2 = HypixelConnection( "skyblock/profiles", uuid = UUID )
         if s2 != 200 and s2 < 400:
@@ -219,51 +219,51 @@ async def link( ctx, User = None ):
     return await ctx.send( f"{ User } is not a valid Minecraft Account!" )
   
 
-@client.command(aliases = ["ru", "deleteuser", "du"])
-@commands.has_any_role(719848521813196951, 846825420993331203)
-async def removeuser(ctx, user: discord.Member):
+@client.command( aliases = [ "ru", "deleteuser", "du" ] )
+@commands.has_any_role( 719848521813196951, 846825420993331203 )
+async def removeuser( ctx, user: discord.Member ):
   try:
-    MongoCon("users").delete_one({"_id":user.id})
-    await ctx.send("User Removed!")
+    MongoCon( "users" ).delete_one( { "_id":user.id } )
+    await ctx.send( "User Removed!" )
   except:
-    await ctx.send("User Not Found")
+    await ctx.send( "User Not Found" )
 
 
 @client.event 
-async def on_member_remove(member):
+async def on_member_remove( member ):
   try:
-    MongoCon("users").delete_one({"_id":member.id})
+    MongoCon( "users" ).delete_one( { "_id":member.id } )
   except:
-    await asyncio.sleep(60)
-    MongoCon("users").delete_one({"_id":member.id})
+    await asyncio.sleep( 60 )
+    MongoCon( "users" ).delete_one( { "_id":member.id } )
 
 
-@client.command(aliases = ["mru", "massdeleteuser", "mdu"])
-@commands.has_any_role(719848521813196951, 846825420993331203)
-async def massremoveusers(ctx, *user: discord.Member):
+@client.command( aliases = [ "mru", "massdeleteuser", "mdu" ] )
+@commands.has_any_role( 719848521813196951, 846825420993331203 )
+async def massremoveusers( ctx, *user: discord.Member ):
   Removed = NotFound = 0
-  l = []
-  con = MongoCon("users")
-  msg = await ctx.send("Deleting Users...")
+  l = [ ]
+  con = MongoCon( "users" )
+  msg = await ctx.send( "Deleting Users..." )
   for x in user:
-    for y in con.find():
-      if y["_id"] == x.id:
-        con.delete_one(x)
+    for y in con.find( ):
+      if y[ "_id" ] == x.id:
+        con.delete_one( x )
         Removed +=1 
-    l.append(x)
+    l.append( x )
     NotFound +=1
   if NotFound != 0:
-    message = f"\nRemoved {Removed} users with {NotFound} users skipped due to not being found||(And maybe an error)||.\nUsers Skipped:\n"
+    message = f"\nRemoved { Removed } users with { NotFound } users skipped due to not being found||(And maybe an error)||.\nUsers Skipped:\n"
     for x in l:
-      message += f"{x.mention}[{x.id}], "
+      message += f"{ x.mention }[{ x.id }], "
   else:
-    message = f"\nAll {Removed} users removed!"
-  await msg.edit(content=f"Purge Completed!{message[:-2]}")
+    message = f"\nAll { Removed } users removed!"
+  await msg.edit( content = f"Purge Completed!{ message[ :-2 ] }" )
 
 
-@client.command(aliases = ["sc"])
-async def ScamCheck(ctx, IGN=None):
-  await ctx.send("Deprecated For Now.")
+@client.command( aliases = [ "sc" ] )
+async def ScamCheck( ctx, IGN=None ):
+  await ctx.send( "Deprecated For Now." )
   #if IGN != None:
   #  uuid = MojangAPI.get_uuid(IGN)
   #  if uuid != None:
@@ -296,21 +296,21 @@ async def ScamCheck(ctx, IGN=None):
 #  await ctx.send("You aren't linked!")
 
 
-@client.command()
-@commands.has_any_role(719848521813196951, 846825420993331203)
-async def runThrough(ctx):
-  con = MongoCon("users")
-  guild = client.get_guild(SSB)
-  mod = get(guild.roles, id=StaffTeam).members
-  Jr = get(guild.roles, id=843249027411607552).members
-  Sr = get(guild.roles, id=843248725190508564).members
-  li = [Jr, Sr]
+@client.command( )
+@commands.has_any_role( 719848521813196951, 846825420993331203 )
+async def runThrough( ctx ):
+  con = MongoCon( "users" )
+  guild = client.get_guild( SSB )
+  mod = get( guild.roles, id=StaffTeam ).members
+  Jr = get( guild.roles, id=843249027411607552 ).members
+  Sr = get( guild.roles, id=843248725190508564 ).members
+  li = [ Jr, Sr ]
   l, strs = [], ""
-  msg = await ctx.send("Searching...")
+  msg = await ctx.send( "Searching..." )
   for z in li:
     for y in z:
-      r=con.find_one({"_id":y.id})
-      if type(r) != dict:
+      r=con.find_one( { "_id":y.id } )
+      if type( r ) != dict:
         if y not in mod:
             l.append( y.id )
   msg1 = await ctx.send( "Missing Users:" )
