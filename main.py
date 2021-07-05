@@ -198,10 +198,13 @@ async def link( ctx, User = None ):
           print( 5 )
           for x in j2[ "profiles" ]:
             print( 6 )
-            if x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"] > CataExp:
-              print( 7 )
-              CataExp = x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"]
-              Profile = x
+            try:
+              if x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"] > CataExp:
+                print( 7 )
+                CataExp = x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"]
+                Profile = x
+             except KeyError:
+               pass
           print( 8 )
           CataLevel = find( CataExp )
           if ctx.author not in ST:
