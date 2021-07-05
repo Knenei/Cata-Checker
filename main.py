@@ -82,7 +82,7 @@ class limits(object): # Formally Known As RateLimitDecorator(object):
     '''
     Rate limit decorator class.
     '''
-    def __init__(self, calls=15, period=900, clock=now(), raise_on_limit=False):
+    def __init__(self, calls=15, period=900, clock=now(), raise_on_limit=True):
         '''
         Instantiate a RateLimitDecorator with some sensible defaults. By
         default the Twitter rate limiting window is respected (15 calls every
