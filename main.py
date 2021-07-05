@@ -181,34 +181,25 @@ async def link( ctx, User = None ):
     return await ctx.send( "This Username is already linked to another user!" )
   UUID = MojangAPI.get_uuid( User )
   if UUID:
-    print( 1 )
     j1, s1 = HypixelConnection( "player", uuid = UUID )
     if s1 != 204 and s1 < 400:
-      print( 2 )
       try:
-        print( 3 )
         Discord = j1[ "player" ][ "socialMedia" ][ "links" ][ "DISCORD" ]
       except: 
         return await ctx.send( f"{ User } as no linked Discord Accounts\n" + hel )
       if str( Discord ) == str( ctx.author ):
-        print( 4 )
         j2, s2 = HypixelConnection( "skyblock/profiles", uuid = UUID ) 
         if s2 != 204 and s2 < 400:
           Profile, CataExp = "", 0
-          print( 5 )
           for x in j2[ "profiles" ]:
-            print( 6 )
             try:
               if x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"] > CataExp:
-                print( 7 )
                 CataExp = x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"]
                 Profile = x
             except KeyError:
               pass
-          print( 8 )
           CataLevel = find( CataExp )
           if ctx.author not in ST:
-            print( 9 )
             await ctx.author.edit( nick = f"[{ CataLevel }] { User }")
           con.insert_one( { "ign":User, "_id":ctx.author.id, "uuid":UUID ,"profile":Profile } )
           await ctx.send( f"Successfully Linked to { User }!" )
