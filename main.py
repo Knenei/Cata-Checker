@@ -3,7 +3,7 @@ import asyncio
 import discord
 import pymongo
 import requests
-from ratelimit import limits
+from ratelimit import limits, RateLimitException
 from mojang import MojangAPI
 from discord.utils import get
 from discord.ext import commands, tasks
