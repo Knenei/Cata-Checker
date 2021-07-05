@@ -177,7 +177,7 @@ async def link( ctx, User = None ):
     return await ctx.send( hel )
   if con.find_one( { "_id" : ctx.author.id }.count( ) ) > 0:
     return await ctx.send( "You are already linked to " + str(con.find( { "_id" : ctx.author.id } )[ "ign" ] ) )
-  if con.find_one( { "ign" : User } ).count( ) > 0:
+  if con.find( { "ign" : User } ).count( ) > 0:
     return await ctx.send( "This Username is already linked to another user!" )
   UUID = MojangAPI.get_uuid( User )
   if UUID:
