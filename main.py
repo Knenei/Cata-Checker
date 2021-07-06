@@ -182,7 +182,7 @@ async def link( ctx, User = None ):
       try:
         Discord = j1[ "player" ][ "socialMedia" ][ "links" ][ "DISCORD" ]
       except: 
-        return await ctx.send( f"{ User } as no linked Discord Accounts\n" + hel )
+        return await ctx.send( f"{ User } has no linked Discord Accounts\n" + hel )
       if str( Discord ) == str( ctx.author ):
         j2, s2 = HypixelConnection( "skyblock/profiles", uuid = UUID ) 
         if s2 != 204 and s2 < 400:
