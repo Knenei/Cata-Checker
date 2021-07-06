@@ -111,7 +111,6 @@ async def Update_Users( ):
       Total += 1
       if discord in AC and discord not in ST:
         try:
-          print( profile[ 'ign' ] )
           j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
         except RateLimitException as exception:
           await asyncio.sleep( exception.period_remaining )
@@ -147,10 +146,6 @@ async def on_error(ctx, error):
 async def on_command_error(ctx, error):
   Knei = client.get_guild(SSB).get_member(owner)
   await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
-
-
-
-
 
 
 
@@ -196,7 +191,7 @@ async def link( ctx, User = None ):
             try:
               if x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"] > CataExp:
                 CataExp = x[ "members" ][ UUID ][ "dungeons"]["dungeon_types"]["catacombs"]["experience"]
-                Profile = x
+                Profile = x[ "profile_id" ]
             except KeyError:
               pass
           CataLevel = find( CataExp )
