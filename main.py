@@ -111,6 +111,7 @@ async def Update_Users( ):
       Total += 1
       if discord in AC and discord not in ST:
         try:
+          print( profile[ 'ign' ] )
           j, s = HypixelConnection( "skyblock/profile", profile = profile[ "profile" ])
         except RateLimitException as exception:
           await asyncio.sleep( exception.period_remaining )
