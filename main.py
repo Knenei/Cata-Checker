@@ -127,10 +127,13 @@ async def Update_Users( ):
           else: 
             UsersNo += 1
         else: 
+          print( discord )
           UserUnknown += 1
       else: 
+        print( discord )
         UserUnknown += 1
     else: 
+      print( discord ) 
       UserUnknown += 1
 
   print( "Update has finished!" )
