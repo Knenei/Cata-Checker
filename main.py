@@ -146,10 +146,10 @@ async def on_error(ctx, error):
   await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
 
 
-@client.event
-async def on_command_error(ctx, error):
-  Knei = client.get_guild(SSB).get_member(owner)
-  await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
+#@client.event
+#async def on_command_error(ctx, error):
+#  Knei = client.get_guild(SSB).get_member(owner)
+#  await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
 
 
 
@@ -301,7 +301,7 @@ async def runThrough( ctx ): #, Warn = None ):
   SC = get( guild.roles, id = 843248725190508564 ).members
   MC = get( guild.roles, id = 858362359570366484 ).members
   UC = get( guild.roles, id = 858362408706506833 ).members
-  AC = [ x for x in [ UC + MC + SC + JC ] if x not in [ ST + CM] ]
+  AC = [ x for x in [ UC + MC + SC + JC ] if x not in [ ST + CM ] ]
   Members, strs, fail = [  ], "", ""
   search = await ctx.send( "Searching..." )
   for member in AC:
