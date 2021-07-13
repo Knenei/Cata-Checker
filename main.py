@@ -107,7 +107,6 @@ async def Update_Users( ):
 
   for profile in mon.find( ):
     discord = guild.get_member( int( profile[ "_id" ] ) )
-    print( profile[ "ign" ], discord )  
     if discord:
       Total += 1
       if discord in AC and discord not in ST:
@@ -127,13 +126,10 @@ async def Update_Users( ):
           else: 
             UsersNo += 1
         else: 
-          print( discord )
           UserUnknown += 1
       else: 
-        print( discord )
         UserUnknown += 1
     else: 
-      print( discord ) 
       UserUnknown += 1
 
   print( "Update has finished!" )
