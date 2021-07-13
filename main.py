@@ -305,6 +305,7 @@ async def runThrough( ctx ): #, Warn = None ):
   Members, strs, fail = [  ], "", ""
   search = await ctx.send( "Searching..." )
   for member in AC:
+    print( member ) 
     if con.count_documents( { '_id': member.id }, limit = 1 ) == 0:
       Members.append( member.id )
   await search.edit( "Search Completed Returning Results..." )
