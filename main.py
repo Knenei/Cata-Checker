@@ -307,7 +307,7 @@ async def runThrough( ctx ): #, Warn = None ):
   if Members[ 0 ]:
     Initial = await ctx.send( "Missing Members:" )
     for member in Members:
-      strs += "<@{ 0 }>[{ 0 }]\n".format( member )
+      strs += "<@{0}>[{0}]\n".format( member )
     await Initial.edit( content = Initial.content + strs )  
     #if Warn:
     #  await ctx.send( "Preparing to DM users" )
