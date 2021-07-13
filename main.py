@@ -176,7 +176,7 @@ async def link( ctx, User = None ):
   if User.lower() == 'help':
     return await ctx.send( hel )
   if con.count_documents( { '_id': ctx.author.id }, limit = 1 ) != 0:
-    return await ctx.send( "You are already linked to " + str(con.find( { "_id" : ctx.author.id } )[ "ign" ] ) )
+    return await ctx.send( "You are already linked to " + str(con.find_one( { "_id" : ctx.author.id } )[ "ign" ] ) )
   if con.count_documents( { 'ign': User }, limit = 1 ) != 0:
     return await ctx.send( "This Username is already linked to another user!" )
   UUID = MojangAPI.get_uuid( User )
@@ -305,10 +305,9 @@ async def runThrough( ctx ): #, Warn = None ):
   Members, strs, fail = [  ], "", ""
   search = await ctx.send( "Searching..." )
   for member in AC:
-    print( member ) 
     if con.count_documents( { '_id': member.id }, limit = 1 ) == 0:
       Members.append( member.id )
-  await search.edit( "Search Completed Returning Results..." )
+  await search.edit( content = "Search Completed Returning Results..." )
   if Members[ 0 ]:
     Initial = await ctx.send( "Missing Members:" )
     for member in Members:
