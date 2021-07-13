@@ -292,7 +292,7 @@ async def ScamCheck( ctx, IGN=None ):
 
 @client.command( )
 @commands.has_any_role( 719848521813196951, 846825420993331203 )
-async def runThrough( ctx )#, Warn = None ):
+async def runThrough( ctx ): #, Warn = None ):
   con = MongoCon( "users" )
   guild = client.get_guild( SSB )
   ST = get( guild.roles, id = StaffTeam ).members
