@@ -308,7 +308,7 @@ async def runThrough( ctx ): #, Warn = None ):
     Initial = await ctx.send( "Missing Members:" )
     for member in Members:
       strs += "<@{0}>[{0}]\n".format( member )
-    await Initial.edit( content = Initial.content + strs )  
+    await Initial.edit( content = Initial.content + "\n" + strs + f"\n\n Total Missing: { len( Members ) }" )  
     #if Warn:
     #  await ctx.send( "Preparing to DM users" )
     #  await asyncio.sleep( 5 )
