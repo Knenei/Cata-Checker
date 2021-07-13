@@ -292,26 +292,39 @@ async def ScamCheck( ctx, IGN=None ):
 
 @client.command( )
 @commands.has_any_role( 719848521813196951, 846825420993331203 )
-async def runThrough( ctx ):
+async def runThrough( ctx )#, Warn = None ):
   con = MongoCon( "users" )
   guild = client.get_guild( SSB )
-  mod = get( guild.roles, id=StaffTeam ).members
-  Jr = get( guild.roles, id=843249027411607552 ).members
-  Sr = get( guild.roles, id=843248725190508564 ).members
-  li = [ Jr, Sr ]
-  l, strs = [], ""
-  msg = await ctx.send( "Searching..." )
-  for z in li:
-    for y in z:
-      r=con.find_one( { "_id":y.id } )
-      if type( r ) != dict:
-        if y not in mod:
-            l.append( y.id )
-  msg1 = await ctx.send( "Missing Users:" )
-  for x in l:
-    strs += "<@{}>[{}]\n".format( x, x )
-  await msg1.edit( content=msg1.content+"\n"+ strs +"\nTotal Missing: "+str( len( l ) ) )
-  await msg.edit( content="Search completed" )
+  ST = get( guild.roles, id = StaffTeam ).members
+  CM = get( guild.roles, id = 846825420993331203 ).members
+  JC = get( guild.roles, id = 843249027411607552 ).members
+  SC = get( guild.roles, id = 843248725190508564 ).members
+  MC = get( guild.roles, id = 858362359570366484 ).members
+  UC = get( guild.roles, id = 858362408706506833 ).members
+  AC = [ x for x in [ UC + MC + SC + JC ] if x not in [ ST + CM] ]
+  Members, strs, fail = [  ], "", ""
+  search = await ctx.send( "Searching..." )
+  for member in AC:
+    if con.count_documents( { '_id': member[ '_id' ] }, limit = 1 ) == 0:
+      Members.append( member.id )
+  await search.edit( "Search Completed Returning Results..." )
+  if Members[ 0 ]:
+    Initial = await ctx.send( "Missing Members:" )
+    for member in Members:
+      strs += "<@{ 0 }>[{ 0 }]\n".format( member )
+    await Initial.edit( content = Initial.content + strs )  
+    #if Warn:
+    #  await ctx.send( "Preparing to DM users" )
+    #  await asyncio.sleep( 5 )
+    #  Warn = await ctx.send( "Users DM Status:" )
+    #  for member in Members:
+    #    try:
+    #      await guild.get_member( member ).send( "```scala\nHello {0} it seems like you arent in the DataBase for linked users!\nPlease run \"%link <YOUR_IGN>\" as soon as you can in ▹carrier-bot-commands.\n1 Week after you recieve this message you will be STRIKED. \nSKY | Brokers Dungeons Management\n```\n||This was an automated message any reply wont do much because I don't thing there will be a reason to reply||".format( await guild.get( member ).name ) )
+    #    except:
+    #      fail += "<@{ 0 }>".format( member )
+    #  await Warn.edit( content = Warn.content + "\n" + fail )
+  else:
+    await ctx.send( "All Carriers Are In The Database" )
 
 
 
