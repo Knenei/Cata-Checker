@@ -120,7 +120,7 @@ async def Update_Users( ):
           if not discord.nick or discord.nick != f"[{ Level }] { profile[ 'ign' ]}":
             await discord.edit( nick = f"[{ Level }] { profile[ 'ign' ] }" )
             UsersUp += 1
-            if discord not in SC.members + MC.members + UC.members and Level >= 32:
+            if discord not in SC.members + MC.members + UC.members and Level == 32:
               await discord.add_roles( roles = [ SC ], reason = "Meets requirements for Senior Carrier")
               await discord.remove_roles( roles = [ JC ], reason = "Met requirements for Senior Carrier")
           else: 
@@ -141,14 +141,10 @@ async def on_error(ctx, error):
   Knei = client.get_guild(SSB).get_member(owner)
   await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
 
-
-#@client.event
-#async def on_command_error(ctx, error):
-#  Knei = client.get_guild(SSB).get_member(owner)
-#  await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"))
-
-
-
+@client.event
+async def on_command_error(ctx, error):
+  Knei = client.get_guild(SSB).get_member(owner)
+  await Knei.send(error)#.replace(os.environ["HYPY"], "KEY"
 
 hel = """```scala
 1. Type "/profile" in the in-game chat and press enter
@@ -208,7 +204,6 @@ async def link( ctx, User = None ):
   else:
     return await ctx.send( f"{ User } is not a valid Minecraft Account!" )
   
-
 @client.command( aliases = [ "ru", "deleteuser", "du" ] )
 @commands.has_any_role( 719848521813196951, 846825420993331203 )
 async def removeuser( ctx, user: discord.Member ):
@@ -219,6 +214,16 @@ async def removeuser( ctx, user: discord.Member ):
     await ctx.send( "User Not Found" )
 
 
+@client.command( aliases = [ "ru", "deleteuser", "du" ] )
+@commands.has_any_role( 719848521813196951, 846825420993331203 )
+async def removeuser( ctx, user: discord.Member ):
+  try:
+    MongoCon( "users" ).delete_one( { "_id":user.id } )
+    await ctx.send( "User Removed!" )
+  except:
+    await ctx.send( "User Not Found" )
+    
+    
 @client.event 
 async def on_member_remove( member ):
   try:
@@ -321,6 +326,7 @@ async def runThrough( ctx ): #, Warn = None ):
     #  await Warn.edit( content = Warn.content + "\n" + fail )
   else:
     await ctx.send( "All Carriers Are In The Database" )
+
 
 
 
